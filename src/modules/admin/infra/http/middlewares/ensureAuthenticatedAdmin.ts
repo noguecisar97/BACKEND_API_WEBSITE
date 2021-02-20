@@ -26,6 +26,8 @@ export default function ensureAuthenticated(
 
   const [, token] = authHeader.split(' ');
 
+  if (!authConfig.jwt.secret) throw new AppError('Token is undefined');
+
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 

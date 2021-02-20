@@ -49,6 +49,8 @@ class AuthenticateAdminService {
 
     const { secret, expiresIn } = authConfig.jwt;
 
+    if (!secret) throw new AppError('Erro na chave de criação.');
+
     const token = sign({}, secret, {
       subject: admin.id,
       expiresIn,
