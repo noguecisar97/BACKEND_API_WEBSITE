@@ -23,9 +23,10 @@ class UpdateUserService {
     renda,
     painel,
     dataRenovacao,
-  }: Omit<User, '_id' | 'dataInicio' | 'updatedAt'>): Promise<
-    User | undefined
-  > {
+  }: Omit<
+    User,
+    '_id' | 'dataInicio' | 'updatedAt' | 'adminResponsavel'
+  >): Promise<User | undefined> {
     const userExist = await this.userRepository.findById(id);
 
     if (!userExist) throw new AppError('User not exist.');

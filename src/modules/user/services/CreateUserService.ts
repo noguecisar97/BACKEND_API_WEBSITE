@@ -29,6 +29,7 @@ class CreateUserService {
     renda,
     painel,
     dataRenovacao,
+    adminResponsavel,
   }: Omit<User, 'id' | '_id' | 'dataInicio' | 'updatedAt'>): Promise<User> {
     const userExistLogin = await this.userRepository.findByLogin(login);
 
@@ -46,6 +47,7 @@ class CreateUserService {
       painel: painel.toUpperCase(),
       renda,
       dataRenovacao: new Date(dataRenovacao),
+      adminResponsavel,
       dataInicio: new Date(),
       updatedAt: new Date(),
     });

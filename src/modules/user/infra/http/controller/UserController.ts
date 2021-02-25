@@ -21,6 +21,10 @@ export default class UserController {
   ): Promise<Response> {
     const { nome, login, telefone, email, painel } = req.query;
 
+    const { id } = req.admin;
+
+    const adminResponsavel = id;
+
     const findUsers = container.resolve(FindUserService);
 
     const users = await findUsers.execute({
@@ -29,6 +33,7 @@ export default class UserController {
       telefone,
       email,
       painel,
+      adminResponsavel,
     });
 
     return res.status(200).json(users);
@@ -47,6 +52,8 @@ export default class UserController {
       dataRenovacao,
     } = req.body;
 
+    const { id } = req.admin;
+
     const userCreate = container.resolve(CreateUserService);
 
     const user = await userCreate.execute({
@@ -59,6 +66,7 @@ export default class UserController {
       painel,
       renda,
       dataRenovacao,
+      adminResponsavel: id,
     });
 
     return res.status(200).json(user);
@@ -97,11 +105,13 @@ export default class UserController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
-    const { id } = req.body;
+    const { id: ID } = req.body;
+
+    const { id } = req.admin;
 
     const userDelete = container.resolve(DeleteUserService);
 
-    await userDelete.execute(id);
+    await userDelete.execute(ID, id);
 
     return res.status(200).json({ admin: 'user deleted!' });
   }

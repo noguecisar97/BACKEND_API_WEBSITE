@@ -8,6 +8,7 @@ interface IUser {
   login: string;
   nome: string;
   telefone: string;
+  adminResponsavel: string;
 }
 
 @injectable()
@@ -25,6 +26,7 @@ class FindUserService {
     login,
     nome,
     telefone,
+    adminResponsavel,
   }: IUser): Promise<User[] | undefined> {
     const data = {
       email: email ? email.toUpperCase() : '',
@@ -32,6 +34,7 @@ class FindUserService {
       login: login || '',
       nome: nome ? nome.toUpperCase() : '',
       telefone: telefone ? telefone.toUpperCase() : '',
+      adminResponsavel,
     };
 
     const users = await this.userRepository.find(data);

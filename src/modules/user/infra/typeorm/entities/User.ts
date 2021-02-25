@@ -42,6 +42,9 @@ export default class User {
   @Column()
   dataRenovacao: Date;
 
+  @Column()
+  adminResponsavel: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   dataInicio: Date;
 

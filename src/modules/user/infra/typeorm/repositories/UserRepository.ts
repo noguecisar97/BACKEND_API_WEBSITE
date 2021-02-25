@@ -1,6 +1,5 @@
 import { getRepository, Repository } from 'typeorm';
 import IUserRepository from '@modules/user/repositories/IUserRepository';
-import ICreateUserDTO from '@modules/user/dtos/ICreateUserDTO';
 import IUpdateUserDTO from '@modules/user/dtos/IUpdateUserDTO';
 import IFindUserDTO from '@modules/user/dtos/IFindUserDto';
 import User from '../entities/User';
@@ -44,6 +43,7 @@ class UserRepository implements IUserRepository {
         telefone: { $regex: `.*${data.telefone}.*` },
         painel: { $regex: `.*${data.painel}.*` },
         login: { $regex: `.*${data.login}.*` },
+        adminResponsavel: data.adminResponsavel,
       },
     });
 
@@ -62,8 +62,11 @@ class UserRepository implements IUserRepository {
     return findUser;
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.ormRepository.delete({ id });
+  public async delete(id: string, adminResponsavel: string): Promise<void> {
+    await this.ormRepository.delete({
+      id,
+      adminResponsavel,
+    });
   }
 
   public async create({
@@ -79,7 +82,8 @@ class UserRepository implements IUserRepository {
     dataRenovacao,
     dataInicio,
     updatedAt,
-  }: ICreateUserDTO): Promise<User> {
+    adminResponsavel,
+  }: Omit<User, '_id'>): Promise<User> {
     const createUser = await this.ormRepository.create({
       id,
       nome,
@@ -91,6 +95,7 @@ class UserRepository implements IUserRepository {
       painel,
       renda,
       dataRenovacao,
+      adminResponsavel,
       dataInicio,
       updatedAt,
     });
@@ -111,7 +116,9 @@ class UserRepository implements IUserRepository {
     painel,
     renda,
     dataRenovacao,
-  }: IUpdateUserDTO): Promise<User | undefined> {
+  }: IUpdateUserDTO): Promise<
+    Omit<User, '_id' | 'adminResponsavel'> | undefined
+  > {
     await this.ormRepository.update(
       { id },
       {

@@ -27,6 +27,8 @@ export default function ensureAuthenticated(
   const [, token] = authHeader.split(' ');
 
   try {
+    if (!authConfig.jwt.secret) throw new AppError('Chave validacao errado');
+
     const decoded = verify(token, authConfig.jwt.secret);
 
     const { sub } = decoded as TokenPayLoad;

@@ -4,4 +4,5 @@ export default interface IQuery {
   login?: string;
   nome?: string;
   telefone?: string;
+  adminResponsavel: string;
 }
